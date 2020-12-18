@@ -9,7 +9,7 @@ typedef map<int, std::string> Tree;
 
 int main(int argc, char *argv[])
 {
-    /* ==== TESTS ====
+    ///* ==== TESTS ====
     Tree tree;
     assert(tree.getSize() == 0);
     tree.insert(6, "A");
@@ -33,12 +33,17 @@ int main(int argc, char *argv[])
     tree.printAscending();
 
     Tree t2 = tree;
-    t2.printAscending();
+    assert(t2 == tree);
+    t2.insert(155, "asdf");
+    assert(!(t2 == tree));
 
     t2.write("tree.txt");
     tree.read("tree.txt");
-    tree.printAscending();
     assert(t2 == tree);
+
+    Tree t3;
+    t2.clear();
+    assert(t2 == t3);
 
     int cnt = tree.getSize();
     Node *nodes = new Node[cnt];
@@ -46,7 +51,7 @@ int main(int argc, char *argv[])
     tree.returnAscending(nodes);
     for (int i = 0; i < cnt; ++i)
         std::cout << nodes[i].key << ": " << nodes[i].value << "\n";
-    ==== END OF TESTS ====*/
+    //==== END OF TESTS ====*/
 
     QApplication a(argc, argv);
     MainWindow w;

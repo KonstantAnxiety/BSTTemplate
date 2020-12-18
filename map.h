@@ -31,7 +31,7 @@ public:
     void read(const std::string &path);
     void write(const std::string &path) const;
     const V &operator[](K key) const;
-    bool operator==(const map &other) const;
+    bool operator==(const map &other);
 
 private:
     void writeNode(std::ostream &out, node<K, V> *leaf) const;
@@ -42,6 +42,7 @@ private:
     node<K, V> *find(K key, node<K, V> *leaf) const;
     void printAscending(node<K, V> *leaf) const;
     void returnAscending(node<K, V> nodes[], int *n, node<K, V> *leaf) const;
+    void equalTree(node<K, V> *leaf, const map &other, bool *eq);
 
     node<K, V> *root;
     int size;
@@ -275,9 +276,28 @@ const V &map<K, V>::operator[](K key) const
 }
 
 template<typename K, typename V>
-bool map<K, V>::operator==(const map &other) const
+void map<K, V>::equalTree(node<K, V> *leaf, const map &other, bool *eq)
 {
-    return 1;
+    if (!(*eq))
+        return;
+    if (leaf != NULL) {
+        node<K, V> *p = other.find(leaf->key);
+        if (p == NULL || p->value != leaf->value) {
+            *eq = false;
+            return;
+        }
+        equalTree(leaf->left, other, eq);
+        equalTree(leaf->right, other, eq);
+    }
+}
+
+template<typename K, typename V>
+bool map<K, V>::operator==(const map &other)
+{
+    bool eq = true;
+    equalTree(root, other, &eq);
+    equalTree(other.root, *this, &eq);
+    return eq;
 }
 
 template<typename K, typename V>
